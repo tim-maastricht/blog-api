@@ -6,12 +6,10 @@ loadEnvFile();
 
 // connect function 
 async function dbConnect(){
-	let dbUrl = process.env.DATABASE_URI;
+	let dbUrl = process.env.DATABASE_URL;
 	console.log(dbUrl);
   console.log("Connected")
 
-	// temporary workaround until Node 25.6.1 is available
-	// should be by Wednesday???
 	// workaround is to modify expected dns servers
 	require('node:dns').setServers(['8.8.8.8', '1.1.1.1']);
 
@@ -26,4 +24,3 @@ async function dbDisconnect(){
 module.exports = {
 	dbConnect, dbDisconnect
 }
-dbConnect();
