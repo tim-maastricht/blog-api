@@ -28,7 +28,7 @@ const defaultEnvValues = {
   // default secret key guaranteed to be unique
   JWT_SECRET_KEY: crypto.randomBytes(64).toString("hex"),
   // default db connection
-  DATABASE_URI: `mongodb://127.0.0.1:27017/${process.env.npm_package_name}`
+  DATABASE_URL: `mongodb://127.0.0.1:27017/${process.env.npm_package_name}`
 }
 
 async function writeToFile(){

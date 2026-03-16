@@ -1,71 +1,76 @@
-// const mongoose = require("mongoose");
 const { PostModel } = require("../../models/PostModel");
 const { UserModel } = require("../../models/UserModel");
 const { dbConnect, dbDisconnect } = require("../dbConnManager");
 
-async function dbSeed() {
 
-  // user data
-  const usersToSeed = [
-    {
-      username: "seedUser1",
-      password: "bananas1",
-      email: "test+seed1@email.com",
-      isAdmin: false,
-      usersWeFollow: [],
-      postsWeReactedTo: []
-    },
-    {
-      username: "seedUser2",
-      password: "bananas2",
-      email: "test+seed2@email.com",
-      isAdmin: true,
-      usersWeFollow: [],
-      postsWeReactedTo: []
-    },
-  ]
+async function dbSeed () {
+console.log("before seeding...")
+	// User data
+	const usersToSeed = [
+		{
+			username: "seedUser1",
+			password: "bananas1",
+			email: "test+seed1@email.com",
+			isAdmin: false, 
+			usersWeFollow: [],
+			postsWeReactedTo: []
+		},
+		{
+			username: "seedUser2",
+			password: "bananas1",
+			email: "test+seed2@email.com",
+			isAdmin: true, 
+			usersWeFollow: [],
+			postsWeReactedTo: []
+		},
+	];
 
-  // user seeding
-  for (const userData of usersToSeed) {
-    await UserModel.create(userData);
-  }
+  console.log("before for await")
+	// User seeding
+	for await(const userData of usersToSeed) {
+		await UserModel.create(userData);
+	}
 
-  // user have passwords, passwords are hashed on pre-save hook (TODO)
-  // hooks/ middleware won't fire on inserMany, we must loop through user data
-  // and create seed user one by one
+	// Users have passwords, passwords are hashed on pre-save hook (TODO!),
+	// hooks/middleware won't fire on insertMany, we must loop through user data
+	// and create the seed users one by one
 
-  // post data
-  let user1 = await UserModel.findOne({username: usersToSeed[0].username})
-  let user2 = await UserModel.findOne({username: usersToSeed[1].username})
+  console.log("before post data")
+	// Post data
+	let user1 = await UserModel.findOne({username: usersToSeed[0].username});
+	let user2 = await UserModel.findOne({username: usersToSeed[1].username});
+	const postsToSeed = [
+		{
+			title: "Seed Post 1",
+			content: "Lorem ipsum",
+			authors: [
+				user1._id
+			]
+		},
+		{
+			title: "Seed Post 2",
+			content: "Lorem ipsum",
+			authors: [
+				user1._id,
+				user2._id
+			]
+		}
+	];
+  console.log("after user seeds")
 
-  const postsToSeed = [
-    {
-      title: "Seed Post 1",
-      content: "Lorem ipsum dolor sit amet consectitur",
-      authors: [
-        user1._id
-      ]
-    },
-    {
-      title: "Seed Post 1",
-      content: "Lorem ipsum dolor sit amet consectitur",
-      authors: [
-        user1._id,
-        user2._id
-      ]
-    },
-    
-  ]
-  // post seeding
+	// Post seeding
 
-  await PostModel.insertMany(postsToSeed);
+	// We can use Post.insertMany to seed!
+	await PostModel.insertMany(postsToSeed);
 
 }
 
-dbConnect().then(async () => {
-  console.log("Seed the DB now...");
-  await dbSeed();
-  console.log("DB has been seeded.");
 
-  await dbDisconnect();
+dbConnect().then(async () => {
+
+	console.log("Seeding the database now!");
+	await dbSeed();
+	console.log("Database has been seeded!");
+
+	await dbDisconnect();
 });
