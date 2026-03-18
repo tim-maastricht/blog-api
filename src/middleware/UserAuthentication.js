@@ -9,6 +9,11 @@ async function checkForUserJwt (request, response, next) {
 
 	// Server receives "Bearer aoljscvnsalognsldgksndgslkn"
 	// To have a usable token variable, remove "Bearer " from the auth header
+  if (bearerToken == undefined) {
+    response.status(401).json({
+      message: "Log in to view this resource"
+    })
+  }
 	bearerToken = bearerToken.substring(7);
 	console.log(bearerToken);
 
@@ -27,7 +32,7 @@ async function checkForUserJwt (request, response, next) {
 
 		next();
 	} catch (error) {
-		response.json({
+		response.status(403).json({
 			message:"You are not logged in!"
 		});
 	}
