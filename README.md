@@ -2,89 +2,116 @@
 
 Blog API for the "ExpressJS Build an API" Ed content.
 
-## API Features
+## API Features 
 
-- /user
-  - GET /
-    - Get all users from db
-  - GET /:userId
-    - Get one user from db
-  - GET /username/:targetUsername
-    - Search for a user by their username
-  - GET /email/:targetEmail
-    - Search for a user by their email address
-    - Not essential
-  - GET /search
-    - Search for a user by a given set of data in query string
-      - e.g. localhost:3000/users/search?username=tim&isAdmin=true
-    - Not essential
-  - GET /me/reactedPosts
-    - Show a list of all posts that we reacted to ourselves
-    - Requires an auth header / JWT
-    - Not essential
-  - GET /:userId/reactedPosts
-    - Show a list of all posts that the target user has reacted to
-    - Not essential
-  - POST /
-    - Make a new user in the db
-  - PATCH /:userId - Update a specific user in the database - Require a JWT of the user being updated (e.g. updating your own account) or an admin
-  - DELETE /:userId
-    - Delete a specific user in the database
-    - Require a JWT of the user being deleted (e.g. closing your own account) or an admin
+- /users
+	- GET /
+		- Get all users from database
+	- GET /:userId
+		- Get one user from database
+	- POST /
+		- Make a new user in the database
+	- PATCH /:userId
+		- Update a specific user in the database
+		- Require a JWT of the user being updated (e.g. updating your own account) or an admin
+	- DELETE /:userId
+		- Delete a specific user in the database 
+		- Require a JWT of the user being deleted (e.g. closing your own account) or an admin
+	- GET /username/:targetUsername
+		- Search for a user by their username 
+		- Not essential
+	- GET /email/:targetEmail
+		- Search for a user by their email address
+		- Not essential
+	- GET /search
+		- Search for a user by a given set of data in a query string 
+			- e.g. localhost:3000/users/search?username=alex&isAdmin=false
+		- Not essential
+	- GET /me/reactedposts
+		- Show a list of all posts that we reacted to ourselves
+		- Requires an auth header / JWT 
+		- Not essential
+	- GET /:userId/reactedposts
+		- Show a list of all posts that the target user has reacted to 
+		- Not essential
 
 - /posts
-  - GET /
-    - Get all posts from database
-  - GET /:userId
-    - Get one post from database
-  - GET /search 
-    - Search for a post by a given set of data in query string
-      - e.g. localhost:3000/posts/search?author=tim&title=thrash
-    - Not essential
-  - POST /
-    - Make a new post in the database
-    - Require a JWT of either the author of the post or admin
-  - PATCH /:userId
-    - Update a specific post in the database
-    - Require a JWT of either the author of the post or admin
-  - PUT /reactionCounter/:postId
-    - Require a JWT of either the author of the post or admin
-    - Replace the postId reaction counter reaction counter + 1
-    - Modify the user from the JWT to make sure this post is in their reacted posts array
-    - Not essential
-  - DELETE /:userId
-    - Delete a specific post in the database
-    - Require a JWT of either the author of the post or admin
+	- GET /
+		- Get all posts from database
+	- GET /:postId
+		- Get one post from database
+	- POST /
+		- Make a new post in the database
+		- Require a JWT of either the author of the post or an admin
+	- PATCH /:postId
+		- Update a specific post in the database
+		- Require a JWT of either the author of the post or an admin
+	- DELETE /:postId
+		- Delete a specific post in the database  
+		- Require a JWT of either the author of the post or an admin
+	- GET /search
+		- Search for a post by a given set of data in a query string 
+			- e.g. localhost:3000/posts/search?author=alex&title=bananas
+			- e.g. localhost:3000/posts/search?author=12038uh2eowglknsdfgs&title=bananas
+		- Not essential
+	- PUT /reactioncounter/:postId
+		- Requires a JWT header of the user making the reaction
+		- Replace the postID reaction counter with reaction counter + 1
+		- Modify the user from the JWT to make sure this post is in their reacted posts array 
+		- Not essential 
 
-## Database Entities
 
-All properties of all entities are required.
+## Database Entities 
 
-### User
+All properties of all entities are required!
 
-- email: string, email address for the purpose of validation
-- password: string, hashed and salted value, min length of 8
-  - validate in request middleware
-- isAdmin: boolean, default: false
-- username: string, unique, atleast 3 characters long
-- usersWeFollow: array of foreign keys to users
-- postsWeReactedTo: array of foreign keys to posts
+### User 
+
+- email: String, email address for the purpose of validation!, unique
+- password: String, hashed and salted value at all times!, plaintext should have min length of 8
+	- validate in request middleware
+- isAdmin: Boolean, default false 
+- username: String, unique, at least 3 characters long
+- usersWeFollow: array of foreign keys to Users - HYPOTHETICAL, may not implement
+- postsWeReactedTo: array of foreign keys to Posts 
 
 ### Posts
 
-- title: string, unique
-- content: string
-- authors: array of foreign keys to users
-- reactionCounter: number, minimum of 1, users can click to react multiple times
+- title: String, unique
+- content: String
+- authors: array of foreign keys to Users
+- reactionCounter: number, minimum of 1, user can click to react as much as they want, authors are already reacting to their own posts by default forcing a minimum of 1
+
 
 ## Project Setup
 
-### NPM Script Commands
+### NPM Script Commands 
 
-- NPM script commands
-- Project dependencies
-- Seed & similar files
+- NPM script commands 
+- Project dependencies 
+- Seed & similar files 
 
-### Database Setup
+### Database Setup 
 
-- MongoDB Atlas usage
+- MongoDB Atlas usage 
+
+
+### Features
+
+- User Authentication and Authorisation
+	- JWTs
+		- Make generateJWT function
+		- Make verifyJWT function
+		- Make a login route for the user that makes a JWT 
+		- Make middleware that runs verifyJWT
+	- Middleware
+		- isUserAdmin middleware
+		- isUserLoggedIn middleware 
+		- isUser
+		- extendUserJwt middleware
+			- Optional stretch goal
+			- Process a valid user JWT
+			- Generate a new JWT for the user with a fresh expiry date
+			- Return the new JWT to the user 
+- Post CRUD 
+- User CRUD
