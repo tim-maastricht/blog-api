@@ -1,5 +1,5 @@
 const { UserModel } = require("../models/UserModel");
-
+const { verifyJwt } = require("../utils/jwtUtils");
 
 async function checkForUserJwt (request, response, next) {
 	// Read the Authorization header from the incoming request
