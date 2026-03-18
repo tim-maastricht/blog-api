@@ -2,7 +2,14 @@
 const mongoose = require("mongoose");
 const { loadEnvFile } = require("node:process");
 
-loadEnvFile();
+try {
+    loadEnvFile();
+} catch (error) {
+    console.log("No .env file detected!")
+    if (process.env.NODE_ENV == "production"){
+        console.log("No .env file - this is intentional!");
+    }
+}
 
 // connect function 
 async function dbConnect(){
