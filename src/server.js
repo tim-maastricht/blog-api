@@ -8,15 +8,14 @@ app.use(express.json());
 
 // Do Helmet first so CORS with custom config can overwrite it
 app.use(helmet());
-
 // Simple CORS config with default values
 // We want to customise the origins to allow only our relevant frontends to reach the API 
 let handyCorsConfig = {
-	credentials: true,
-	origin: [
-		"https://yourdeployedfrontenddomain.com",
-		"http://localhost"
-	]
+    credentials: true,
+    origin: [
+        "https://yourdeployedfrontenddomain.com",
+        "http://localhost"
+    ]
 }
 app.use(cors(handyCorsConfig));
 
