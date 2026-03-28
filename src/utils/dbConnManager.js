@@ -16,7 +16,7 @@ async function dbConnect(){
 	let dbUrl = process.env.DATABASE_URL;
 	console.log(dbUrl);
   console.log("Connected")
-
+// check if this is still bugging out
 	// workaround is to modify expected dns servers
 	require('node:dns').setServers(['8.8.8.8', '1.1.1.1']);
 
