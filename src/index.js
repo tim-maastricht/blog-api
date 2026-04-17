@@ -4,6 +4,8 @@ const {app} = require("./server.js");
 // Load up environment variables 
 const {loadEnvFile} = require("node:process");
 
+
+// TODO cleanup
 try {
     loadEnvFile();
 } catch (error) {
