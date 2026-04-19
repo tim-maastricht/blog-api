@@ -22,7 +22,7 @@ userRouter.get(
       data: {
         users: allUsers,
         posts: allPosts,
-      },
+      }, // rando comment
     });
   },
 );
